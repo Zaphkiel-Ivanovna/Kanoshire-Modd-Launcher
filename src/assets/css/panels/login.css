@@ -22,9 +22,9 @@
     border: none;
     margin: 2% 0;
     height: 2em;
-    background-color: #00bd7a;
-    box-shadow: 0 0 5px #00bd7a;
-    color: #121212;
+    background-color: #8f0d0d;
+    box-shadow: 0 0 5px #8f0d0d;
+    color: #ffffff;
     font: normal normal bold 19px/29px Poppins;
     cursor: pointer;
 }
@@ -35,14 +35,14 @@
 }
 
 .login-type-btn:disabled {
-    background-color: #00bd7a;
-    box-shadow: 0 0 5px #00bd7a;
+    background-color: #8f0d0d;
+    box-shadow: 0 0 5px #8f0d0d;
     cursor: default;
 }
 
 .login-type-btn:disabled:hover {
-    background-color: #00bd7a;
-    box-shadow: 0 0 5px #00bd7a;
+    background-color: #8f0d0d;
+    box-shadow: 0 0 5px #8f0d0d;
 }
 
 .login-card-mojang {
@@ -94,9 +94,9 @@
     border: none;
     margin: 2% 0;
     height: 2em;
-    background-color: #00bd7a;
-    box-shadow: 0 0 5px #00bd7a;
-    color: #121212;
+    background-color: #8f0d0d;
+    box-shadow: 0 0 5px #8f0d0d;
+    color: #ffffff;
     font: normal normal bold 19px/29px Poppins;
     cursor: pointer;
 }

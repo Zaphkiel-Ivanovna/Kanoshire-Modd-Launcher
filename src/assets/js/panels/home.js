@@ -205,8 +205,8 @@ class Home {
         let online = document.querySelector(".etat-text .online");
         let serverPing = await new Status(this.config.status.ip, this.config.status.port).getStatus();
 
+        nameServer.textContent = this.config.status.nameServer;
         if (!serverPing.error) {
-            nameServer.textContent = this.config.status.nameServer;
             serverMs.innerHTML = `<span class="green">En ligne</span> - ${serverPing.ms}ms`;
             online.classList.toggle("off");
             playersConnected.textContent = serverPing.playersConnect;

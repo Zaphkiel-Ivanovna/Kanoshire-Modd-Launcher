@@ -53,13 +53,13 @@ ipcMain.on('main-window-hide', () => MainWindow.getWindow().hide())
 ipcMain.on('main-window-show', () => MainWindow.getWindow().show())
 
 ipcMain.handle('Microsoft-window', async(event, client_id) => {
-    return await new Microsoft(client_id).getAuth();
+    const account = await new Microsoft(client_id).getAuth();
+    return account;
 })
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
 });
-
 
 autoUpdater.autoDownload = false;
 

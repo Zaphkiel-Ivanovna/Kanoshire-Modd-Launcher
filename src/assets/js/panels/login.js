@@ -58,6 +58,7 @@ class Login {
                     return;
                 }
 
+
                 let account = {
                     access_token: account_connect.access_token,
                     client_token: account_connect.client_token,

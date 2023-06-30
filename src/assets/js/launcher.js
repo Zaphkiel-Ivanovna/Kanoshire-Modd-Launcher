@@ -9,6 +9,8 @@
 const fs = require('fs');
 const { Microsoft, Mojang } = require('minecraft-java-core');
 const { ipcRenderer } = require('electron');
+const rpc = require("discord-rpc");
+const client = new rpc.Client({ transport: 'ipc' });
 
 import { config, logger, changePanel, database, addAccount, accountSelect } from './utils.js';
 import Login from './panels/login.js';
@@ -25,6 +27,32 @@ class Launcher {
         this.database = await new database().init();
         this.createPanels(Login, Home, Settings);
         this.getaccounts();
+        client.login({ clientId: this.config.discordRPC.ClientID }).catch(console.error);
+
+        client.on('ready', () => {
+            console.log('[DEBUG] Presence now active!')
+            console.log('[WARN] Do not close this Console as it will terminate the rpc')
+            console.log('=================== Error Output ===================')
+            client.request('SET_ACTIVITY', {
+                pid: process.pid,
+                activity: {
+                    state: this.config.discordRPC.State,
+                    timestamps: {
+                        start: Date.now()
+                    },
+                    assets: {
+                        large_image: this.config.discordRPC.LargeImage,
+                        large_text: this.config.discordRPC.LargeImageText
+                    },
+                    buttons: [{
+                            label: this.config.discordRPC.Button1,
+                            url: this.config.discordRPC.Url1
+                        }
+                    ]
+                }
+            })
+            
+        })
     }
 
     initLog() {

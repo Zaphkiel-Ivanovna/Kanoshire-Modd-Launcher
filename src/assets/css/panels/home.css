@@ -10,7 +10,7 @@
 }
 
 .player-head {
-    margin: auto 30px;
+    margin: auto 20px auto 30px;
     background-image: url("../../images/default/setve.png");
     background-size: cover;
     background-position: center;
@@ -21,6 +21,15 @@
     border: none;
     border-radius: 15px;
     transition: all 0.5s cubic-bezier(1, 0.46, 0, 1.29);
+}
+
+.player-name {
+    margin: auto 0px;
+    border: none;
+    color: #ffffff;
+    text-align: center;
+    font: normal normal bold 19px/29px Poppins;
+    line-height: 50px;
 }
 
 .player-head:hover {
@@ -34,14 +43,29 @@
     right: 30px;
     text-align: center;
     height: 50px;
+    background-color: transparent;
     border: none;
-    border-radius: 15px;
-    transition: all 0.5s cubic-bezier(1, 0.46, 0, 1.29);
 }
 
 .settings-btn:hover {
-    border-radius: 5px;
-    transition: all 0.5s cubic-bezier(1, 0.46, 0, 1.29);
+    animation-name: spin;
+    animation-duration: 5000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear; 
+}
+
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}
+
+.settings-icon {
+    height: 50px;
+    width: 50px;
 }
 
 .icon-settings:before {
@@ -64,11 +88,17 @@
     height: 37px;
     border-radius: 20px;
     border: none;
-    background: #00bd7a;
+    background: #8f0d0d;
     font: normal normal bold 20px/25px Poppins;
-    color: #121212;
+    color: #ffffff;
     margin: 15px 0;
-    box-shadow: 0 0 5px #00bd7a;
+    box-shadow: 0 0 5px #8f0d0d;
+}
+
+.play-btn:hover {
+    background: #630a0a;
+    border: 4px solid #bd5d26;
+    box-shadow: 0 0 5px #bd5d26;
 }
 
 .download-content {
@@ -98,7 +128,7 @@
 }
 
 .progress-bar::-webkit-progress-value {
-    background-color: #00bd7a;
+    background-color: #8f0d0d;
     border-radius: 10px;
 }
 
@@ -121,12 +151,6 @@
 .news-block {
     margin-bottom: 1rem;
     transition: opacity 1s;
-    opacity: .4;
-}
-
-.news-block:hover {
-    transition: opacity 1s;
-    opacity: 1;
 }
 
 .opacity-1 {
@@ -139,7 +163,7 @@
     left: 0px;
     width: 100%;
     height: 87px;
-    background-color: #292929;
+    background-color: #2929298c;
     border-radius: 10px 10px 0px 0px;
     transition: color .2s, filter .2s;
 }
@@ -191,12 +215,13 @@
 .news-content {
     position: relative;
     width: 100%;
+    
 }
 
 .bbWrapper {
     position: relative;
     padding: 20px;
-    background-color: #1f1f1f;
+    background-color: #1f1f1f8c;
     font-family: Poppins;
     font-size: 13px !important;
     color: #E1E1E1;
@@ -224,17 +249,12 @@
 
 .server {
     position: relative;
+    margin-bottom: 20px;
     width: 100%;
     height: 75px;
-    background-color: #292929;
+    background-color: #00000080;
     border-radius: 10px;
     transition: opacity 1s;
-    opacity: .4;
-}
-
-.server:hover {
-    transition: opacity 1s;
-    opacity: 1;
 }
 
 .server-img {
@@ -243,6 +263,57 @@
     height: 45px;
     top: 15px;
     left: 15px;
+}
+
+.infos {
+    position: relative;
+    width: 100%;
+    height: 75px;
+    background-color: #00000080;
+    border-radius: 10px;
+    transition: opacity 1s;
+}
+
+.infos-img {
+    position: absolute;
+    width: 42px;
+    height: 45px;
+    top: 15px;
+    left: 15px;
+}
+
+.infos-button {
+    position: absolute;
+    text-align: center;
+    border: none;
+
+    top: 20px;
+    right: 14px;
+    width: fit-content;
+    height: 33px;
+    background-color: #262626;
+    border-radius: 4px;
+    transition: background-color .2s;
+    font: normal normal bold 13px/15px Poppins;
+    color: #E1E1E1;
+}
+
+.infos-button:hover {
+    color: #ffb1b1;
+    border-radius: 5px;
+    transition: all 0.5s cubic-bezier(1, 0.46, 0, 1.29);
+}
+
+.infos-name {
+    position: absolute;
+    color: #E1E1E1;
+    top: 17px;
+    left: 70px;
+    transition: color .2s;
+
+    text-align: center;
+    font: normal normal bold 19px/29px Poppins;
+    line-height: 45px;
 }
 
 .name {

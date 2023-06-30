@@ -22,9 +22,10 @@ class Splash {
 
     async startAnimation() {
         let splashes = [
-            { "message": "Je... vie...", "author": "Luuxis" },
-            { "message": "Salut je suis du code.", "author": "Luuxis" },
-            { "message": "Linux n' ai pas un os, mais un kernel.", "author": "Luuxis" }
+            { "message": "C'est INTEMPESTIBLE !", "author": "Tom.exe" },
+            { "message": "J'vais te cramer le cul !", "author": "TITANx5" },
+            { "message": "T bo", "author": "TontonDemon" },
+            { "message": "Le vrai mais pas l'acteur !", "author": "TontonDemon" }
         ]
         let splash = splashes[Math.floor(Math.random() * splashes.length)];
         this.splashMessage.textContent = splash.message;
@@ -44,7 +45,7 @@ class Splash {
 
     async checkUpdate() {
         if (dev) return this.startLauncher();
-        this.setStatus(`recherche de mise à jour...`);
+        this.setStatus(`Recherche de mise à jour...`);
 
         ipcRenderer.invoke('update-app').then(err => {
             if (err.error) {
@@ -116,4 +117,5 @@ document.addEventListener("keydown", (e) => {
         ipcRenderer.send("update-window-dev-tools");
     }
 })
+  
 new Splash();
