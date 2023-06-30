@@ -11,6 +11,7 @@ const { Launch, Status } = require('minecraft-java-core');
 const { ipcRenderer } = require('electron');
 const launch = new Launch();
 const pkg = require('../package.json');
+const marked = require('marked');
 
 const dataDirectory = process.env.APPDATA || (process.platform == 'darwin' ? `${process.env.HOME}/Library/Application Support` : process.env.HOME)
 
@@ -61,7 +62,7 @@ class Home {
                         </div>
                         <div class="news-content">
                             <div class="bbWrapper">
-                                <p>${News.content.replace(/\n/g, '</br>')}</p>
+                                <p>${marked.parse(News.content)}</p>
                                 <p class="news-author">Auteur,<span> ${News.author}</span></p>
                             </div>
                         </div>`
