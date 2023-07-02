@@ -24,11 +24,10 @@ img {
     background: #141414;
     top: 0px;
     left: 0px;
-    width: 100%;
+    width: 100vw;
     -webkit-app-region: drag;
     z-index: 11;
-    display: none;
-    
+    height: 30px;
     color: #ffffff;
     font: normal normal bold 15px/25px Poppins;
     line-height: 30px;

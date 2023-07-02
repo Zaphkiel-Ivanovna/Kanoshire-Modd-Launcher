@@ -20,10 +20,10 @@
         "ext": "js,html,css"
     },
     "dependencies": {
+        "@xmcl/mod-parser": "^3.3.3",
         "discord-rpc": "^4.0.1",
         "electron-updater": "^5.3.0",
         "jimp": "^0.22.8",
-        "marked": "^5.1.0",
         "minecraft-java-core": "^3.5.7",
         "node-fetch": "2.6.12",
         "png2icons": "^2.0.1",
