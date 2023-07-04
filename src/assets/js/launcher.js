@@ -1,204 +1,193 @@
-/**
- * @author Luuxis
- * @license CC-BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/
- */
-
-'use strict';
-
-// libs 
-const fs = require('fs');
-const { Microsoft, Mojang } = require('minecraft-java-core');
-const { ipcRenderer } = require('electron');
-const rpc = require("discord-rpc");
-const client = new rpc.Client({ transport: 'ipc' });
-
-import { config, logger, changePanel, database, addAccount, accountSelect } from './utils.js';
+import {
+  getConfig, changePanel, addAccount, accountSelect,
+} from './utils.js';
 import Login from './panels/login.js';
 import Home from './panels/home.js';
 import Settings from './panels/settings.js';
 
-class Launcher {
-    async init() {
-        this.initLog();
-        console.log("Initializing Launcher...");
-        if (process.platform == "win32") this.initFrame();
-        this.config = await config.GetConfig().then(res => res);
-        this.database = await new database().init();
-        this.createPanels(Login, Home, Settings);
-        this.getaccounts();
-        client.login({ clientId: this.config.discordRPC.ClientID }).catch(console.error);
+// import Logger from './class/Logger.js';
+import Database from './class/Database.js';
 
-        client.on('ready', () => {
-            console.log('[DEBUG] Presence now active!')
-            console.log('[WARN] Do not close this Console as it will terminate the rpc')
-            console.log('=================== Error Output ===================')
-            client.request('SET_ACTIVITY', {
-                pid: process.pid,
-                activity: {
-                    state: this.config.discordRPC.State,
-                    timestamps: {
-                        start: Date.now()
-                    },
-                    assets: {
-                        large_image: this.config.discordRPC.LargeImage,
-                        large_text: this.config.discordRPC.LargeImageText
-                    },
-                    buttons: [{
-                            label: this.config.discordRPC.Button1,
-                            url: this.config.discordRPC.Url1
-                        }
-                    ]
-                }
-            })
-            
-        })
+// eslint-disable-next-line import/no-unresolved
+const { Microsoft, Mojang } = require('minecraft-java-core');
+const { ipcRenderer } = require('electron');
+const fs = require('fs');
+const rpc = require('discord-rpc');
+
+const client = new rpc.Client({ transport: 'ipc' });
+
+let config;
+let database;
+
+function initLog() {
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey && e.shiftKey && e.key === 'I') || e.key === 'F12') {
+      ipcRenderer.send('main-window-dev-tools');
     }
-
-    initLog() {
-        document.addEventListener("keydown", (e) => {
-            if (e.ctrlKey && e.shiftKey && e.keyCode == 73 || e.keyCode == 123) {
-                ipcRenderer.send("main-window-dev-tools");
-            }
-        })
-        new logger('Launcher', '#7289da')
-    }
-
-    initFrame() {
-        console.log("Initializing Frame...")
-        document.querySelector(".frame").classList.toggle("hide")
-        document.querySelector(".dragbar").classList.toggle("hide")
-
-        document.querySelector("#minimize").addEventListener("click", () => {
-            ipcRenderer.send("main-window-minimize");
-        });
-
-        document.querySelector("#close").addEventListener("click", () => {
-            ipcRenderer.send("main-window-close");
-        })
-    }
-
-    createPanels(...panels) {
-        let panelsElem = document.querySelector(".panels")
-        for (let panel of panels) {
-            console.log(`Initializing ${panel.name} Panel...`);
-            let div = document.createElement("div");
-            div.classList.add("panel", panel.id)
-            div.innerHTML = fs.readFileSync(`${__dirname}/panels/${panel.id}.html`, "utf8");
-            panelsElem.appendChild(div);
-            new panel().init(this.config);
-        }
-    }
-
-    async getaccounts() {
-        let accounts = await this.database.getAll('accounts');
-        let selectaccount = (await this.database.get('1234', 'accounts-selected'))?.value?.selected;
-
-        if (!accounts.length) {
-            changePanel("login");
-        } else {
-            for (let account of accounts) {
-                account = account.value;
-                if (account.meta.type === 'Xbox') {
-                    console.log(`Initializing Xbox account ${account.name}...`);
-                    let refresh = await new Microsoft(this.config.client_id).refresh(account);
-                    let refresh_accounts;
-                    let refresh_profile;
-
-                    if (refresh.error) {
-                        this.database.delete(account.uuid, 'accounts');
-                        this.database.delete(account.uuid, 'profile');
-                        if (account.uuid === selectaccount) this.database.update({ uuid: "1234" }, 'accounts-selected')
-                        console.error(`[Account] ${account.uuid}: ${refresh.errorMessage}`);
-                        continue;
-                    }
-
-                    refresh_accounts = {
-                        access_token: refresh.access_token,
-                        client_token: refresh.client_token,
-                        uuid: refresh.uuid,
-                        name: refresh.name,
-                        refresh_token: refresh.refresh_token,
-                        user_properties: refresh.user_properties,
-                        meta: refresh.meta
-                    }
-
-                    refresh_profile = {
-                        uuid: refresh.uuid
-                    }
-
-                    this.database.update(refresh_accounts, 'accounts');
-                    this.database.update(refresh_profile, 'profile');
-                    addAccount(refresh_accounts);
-                    if (account.uuid === selectaccount) accountSelect(refresh.uuid)
-                } else if (account.meta.type === 'Mojang') {
-                    if (account.meta.offline) {
-                    console.log(`Initializing Crack account ${account.name}...`);
-                        addAccount(account);
-                        if (account.uuid === selectaccount) accountSelect(account.uuid)
-                        continue;
-                    }
-
-                    let validate = await Mojang.validate(account);
-                    if (!validate) {
-                        this.database.delete(account.uuid, 'accounts');
-                        if (account.uuid === selectaccount) this.database.update({ uuid: "1234" }, 'accounts-selected')
-                        console.error(`[Account] ${account.uuid}: Token is invalid.`);
-                        continue;
-                    }
-
-                    let refresh = await Mojang.refresh(account);
-                    console.log(`Initializing Mojang account ${account.name}...`);
-                    let refresh_accounts;
-
-                    if (refresh.error) {
-                        this.database.delete(account.uuid, 'accounts');
-                        if (account.uuid === selectaccount) this.database.update({ uuid: "1234" }, 'accounts-selected')
-                        console.error(`[Account] ${account.uuid}: ${refresh.errorMessage}`);
-                        continue;
-                    }
-
-                    refresh_accounts = {
-                        access_token: refresh.access_token,
-                        client_token: refresh.client_token,
-                        uuid: refresh.uuid,
-                        name: refresh.name,
-                        user_properties: refresh.user_properties,
-                        meta: {
-                            type: refresh.meta.type,
-                            offline: refresh.meta.offline
-                        }
-                    }
-
-                    this.database.update(refresh_accounts, 'accounts');
-                    addAccount(refresh_accounts);
-                    if (account.uuid === selectaccount) accountSelect(refresh.uuid)
-                } else {
-                    this.database.delete(account.uuid, 'accounts');
-                    if (account.uuid === selectaccount) this.database.update({ uuid: "1234" }, 'accounts-selected')
-                }
-            }
-
-
-
-
-            
-            if (!(await this.database.get('1234', 'accounts-selected')).value.selected) {
-                let uuid = (await this.database.getAll('accounts'))[0]?.value?.uuid
-                if (uuid) {
-                    this.database.update({ uuid: "1234", selected: uuid }, 'accounts-selected')
-                    accountSelect(uuid)
-                }
-            }
-
-            if ((await this.database.getAll('accounts')).length == 0) {
-                changePanel("login");
-                document.querySelector(".preload-content").style.display = "none";
-                return
-            }
-            changePanel("home");
-        }
-        document.querySelector(".preload-content").style.display = "none";
-    }
+  });
+  // new Logger('Launcher', '#7289da');
 }
 
-new Launcher().init();
+function initFrame() {
+  console.log('Initializing Frame...');
+  document.querySelector('.frame').classList.toggle('hide');
+  document.querySelector('.dragbar').classList.toggle('hide');
+
+  document.querySelector('#minimize').addEventListener('click', () => {
+    ipcRenderer.send('main-window-minimize');
+  });
+
+  document.querySelector('#close').addEventListener('click', () => {
+    ipcRenderer.send('main-window-close');
+  });
+}
+
+function createPanels(...panels) {
+  const panelsElem = document.querySelector('.panels');
+  panels.forEach((Panel) => {
+    console.log(`Initializing ${Panel.name} Panel...`);
+    const div = document.createElement('div');
+    div.classList.add('panel', Panel.id);
+    div.innerHTML = fs.readFileSync(`${__dirname}/panels/${Panel.id}.html`, 'utf8');
+    panelsElem.appendChild(div);
+    new Panel().init(config);
+  });
+}
+
+async function getaccounts() {
+  const accounts = await database.getAll('accounts');
+  const selectaccount = (await database.get('KanoshireModde-m6S0xQVDjtwj8BHf61KfGlXJ', 'accounts-selected'))?.value?.selected;
+
+  if (!accounts.length) {
+    changePanel('login');
+  } else {
+    await accounts.reduce(async (previousPromise, account) => {
+      await previousPromise;
+      const accountValue = account.value;
+      if (accountValue.meta.type === 'Xbox') {
+        console.log(`Initializing Xbox account ${accountValue.name}...`);
+        const refresh = await new Microsoft(config.client_id).refresh(accountValue);
+
+        if (refresh.error) {
+          database.delete(accountValue.uuid, 'accounts');
+          database.delete(accountValue.uuid, 'profile');
+          if (accountValue.uuid === selectaccount) database.update({ uuid: 'KanoshireModde-m6S0xQVDjtwj8BHf61KfGlXJ' }, 'accounts-selected');
+          console.error(`[Account] ${accountValue.uuid}: ${refresh.errorMessage}`);
+          return;
+        }
+
+        const refreshAccounts = {
+          access_token: refresh.access_token,
+          client_token: refresh.client_token,
+          uuid: refresh.uuid,
+          name: refresh.name,
+          refresh_token: refresh.refresh_token,
+          user_properties: refresh.user_properties,
+          meta: refresh.meta,
+        };
+
+        const refreshProfile = {
+          uuid: refresh.uuid,
+        };
+
+        database.update(refreshAccounts, 'accounts');
+        database.update(refreshProfile, 'profile');
+        addAccount(refreshAccounts);
+        if (accountValue.uuid === selectaccount) accountSelect(refresh.uuid);
+      } else if (accountValue.meta.type === 'Mojang') {
+        if (accountValue.meta.offline) {
+          console.log(`Initializing Crack account ${accountValue.name}...`);
+          addAccount(accountValue);
+          if (accountValue.uuid === selectaccount) accountSelect(accountValue.uuid);
+          return;
+        }
+
+        const validate = await Mojang.validate(accountValue);
+        if (!validate) {
+          database.delete(accountValue.uuid, 'accounts');
+          if (accountValue.uuid === selectaccount) database.update({ uuid: 'KanoshireModde-m6S0xQVDjtwj8BHf61KfGlXJ' }, 'accounts-selected');
+          console.error(`[Account] ${accountValue.uuid}: Token is invalid.`);
+          return;
+        }
+
+        const refresh = await Mojang.refresh(accountValue);
+        console.log(`Initializing Mojang account ${accountValue.name}...`);
+
+        if (refresh.error) {
+          database.delete(accountValue.uuid, 'accounts');
+          if (accountValue.uuid === selectaccount) database.update({ uuid: 'KanoshireModde-m6S0xQVDjtwj8BHf61KfGlXJ' }, 'accounts-selected');
+          console.error(`[Account] ${accountValue.uuid}: ${refresh.errorMessage}`);
+          return;
+        }
+
+        const refreshAccounts = {
+          access_token: refresh.access_token,
+          client_token: refresh.client_token,
+          uuid: refresh.uuid,
+          name: refresh.name,
+          user_properties: refresh.user_properties,
+          meta: {
+            type: refresh.meta.type,
+            offline: refresh.meta.offline,
+          },
+        };
+
+        database.update(refreshAccounts, 'accounts');
+        addAccount(refreshAccounts);
+        if (accountValue.uuid === selectaccount) accountSelect(refresh.uuid);
+      } else {
+        database.delete(accountValue.uuid, 'accounts');
+        if (accountValue.uuid === selectaccount) database.update({ uuid: 'KanoshireModde-m6S0xQVDjtwj8BHf61KfGlXJ' }, 'accounts-selected');
+      }
+    }, Promise.resolve());
+
+    if (!(await database.get('KanoshireModde-m6S0xQVDjtwj8BHf61KfGlXJ', 'accounts-selected')).value.selected) {
+      const uuid = (await database.getAll('accounts'))[0]?.value?.uuid;
+      if (uuid) {
+        database.update({ uuid: 'KanoshireModde-m6S0xQVDjtwj8BHf61KfGlXJ', selected: uuid }, 'accounts-selected');
+        accountSelect(uuid);
+      }
+    }
+
+    if ((await database.getAll('accounts')).length === 0) {
+      changePanel('login');
+      document.querySelector('.preload-content').style.display = 'none';
+      return;
+    }
+    changePanel('home');
+  }
+  document.querySelector('.preload-content').style.display = 'none';
+}
+
+(async () => {
+  initLog();
+  console.log('Initializing Launcher...');
+  if (process.platform === 'win32') initFrame();
+  config = await getConfig().then((res) => res);
+  database = await Database.init();
+  createPanels(Login, Home, Settings);
+  await getaccounts();
+  client.login({ clientId: config.discordRPC.ClientID }).catch(console.error);
+
+  client.on('ready', () => {
+    client.request('SET_ACTIVITY', {
+      pid: process.pid,
+      activity: {
+        state: config.discordRPC.State,
+        timestamps: {
+          start: Date.now(),
+        },
+        assets: {
+          large_image: config.discordRPC.LargeImage,
+          large_text: config.discordRPC.LargeImageText,
+        },
+        buttons: [
+          {
+            label: config.discordRPC.Button1,
+            url: config.discordRPC.Url1,
+          },
+        ],
+      },
+    });
+  });
+})();
