@@ -15,7 +15,7 @@ jobs:
       
       - name: Create Release
         id: create_release
-        uses: ncipollo/release-action@v1
+        uses: softprops/action-gh-release@v1
         with:
           token: ${{ secrets.RELEASE_TOKEN }}
           name: Release ${{ env.version }}
