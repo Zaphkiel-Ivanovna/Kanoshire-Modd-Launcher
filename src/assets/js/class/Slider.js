@@ -11,11 +11,8 @@ class Slider {
     this.min = parseFloat(this.slider.getAttribute('min'));
     this.max = parseFloat(this.slider.getAttribute('max'));
 
-    if (!minValue) minValue = this.min;
-    if (!maxValue) maxValue = this.max;
-
-    this.minValue = minValue;
-    this.maxValue = maxValue;
+    this.minValue = minValue || this.min;
+    this.maxValue = maxValue || this.max;
 
     this.step = parseFloat(this.slider.getAttribute('step'));
 
@@ -62,9 +59,7 @@ class Slider {
 
   setMaxValue(maxValue) {
     const ratio = (maxValue - this.min) / (this.max - this.min);
-    this.touchRight.style.left = `${Math.ceil(
-      ratio * (this.slider.offsetWidth - (this.touchLeft.offsetWidth + this.normalizeFact)) + this.normalizeFact,
-    )}px`;
+    this.touchRight.style.left = `${Math.ceil(ratio * (this.slider.offsetWidth - (this.touchLeft.offsetWidth + this.normalizeFact)) + this.normalizeFact)}px`;
     this.lineSpan.style.marginLeft = `${this.touchLeft.offsetLeft}px`;
     this.lineSpan.style.width = `${this.touchRight.offsetLeft - this.touchLeft.offsetLeft}px`;
   }
@@ -78,12 +73,11 @@ class Slider {
     this.startX = event.pageX - this.x;
     this.selectedTouch = elem;
 
-    const self = this;
-    this.func1 = (event) => {
-      this.onMove(event);
+    this.func1 = (funcEvent) => {
+      this.onMove(funcEvent);
     };
-    this.func2 = (event) => {
-      this.onStop(event);
+    this.func2 = (funcEvent) => {
+      this.onStop(funcEvent);
     };
 
     document.addEventListener('mousemove', this.func1);
@@ -96,8 +90,9 @@ class Slider {
     this.x = event.pageX - this.startX;
 
     if (this.selectedTouch === this.touchLeft) {
-      if (this.x > this.touchRight.offsetLeft - this.selectedTouch.offsetWidth - 24) this.x = this.touchRight.offsetLeft - this.selectedTouch.offsetWidth - 24;
-      else if (this.x < 0) this.x = 0;
+      if (this.x > this.touchRight.offsetLeft - this.selectedTouch.offsetWidth - 24) {
+        this.x = this.touchRight.offsetLeft - this.selectedTouch.offsetWidth - 24;
+      } else if (this.x < 0) this.x = 0;
 
       this.selectedTouch.style.left = `${this.x}px`;
     } else if (this.selectedTouch === this.touchRight) {
@@ -114,7 +109,7 @@ class Slider {
     this.calculateValue();
   }
 
-  onStop(self, event) {
+  onStop() {
     document.removeEventListener('mousemove', this.func1);
     document.removeEventListener('mouseup', this.func2);
     document.removeEventListener('touchmove', this.func1);
@@ -133,7 +128,7 @@ class Slider {
     minValue = minValue * (this.max - this.min) + this.min;
     maxValue = maxValue * (this.max - this.min) + this.min;
 
-    if (this.step != 0.0) {
+    if (this.step !== 0.0) {
       let multi = Math.floor(minValue / this.step);
       this.minValue = this.step * multi;
 

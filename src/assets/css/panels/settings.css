@@ -11,36 +11,34 @@
 }
 
 .tab-btn-css {
-    border-radius: 23px;
     width: 160px;
     height: 37px;
     margin: auto 30px;
     background: #8f0d0d;
-    border: 4px solid #8f0d0d;
+    border-radius: 5px;
+    border: none;
     font: normal normal bold 20px/25px Poppins;
     cursor: pointer;
     box-shadow: 0 0 5px #8f0d0d;
     outline: none;
-    color: #ffffff
+    color: #ffffff;
 }
 
 .tab-btn-css:hover {
     background: #630a0a;
     box-shadow: 0 0 5px #630a0a;
-    border: 4px solid #630a0a;
     transition: 0.3s;
 }
 
 .active-tab-btn {
     background: #630a0a;
-    border: 4px solid #bd5d26;
-    box-shadow: 0 0 5px #bd5d26;
+    border: 2px solid #8f0d0d;
 }
 
 .active-tab-btn:hover {
     background: #630a0a;
-    border: 4px solid #bd5d26;
-    box-shadow: 0 0 5px #bd5d26;
+    border: 2px solid #8f0d0d;
+    transition: 0.3s;
 }
 
 .tabs-settings-content {
@@ -208,7 +206,8 @@
  ******************************************************************************/
 
 .java-settings {
-    background: #292929;
+    background: rgba(0, 0, 0, 0.5); /* Couleur de fond transparente */
+    backdrop-filter: blur(10px);
     border-radius: 20px;
     width: 90%;
     margin: 0 auto;

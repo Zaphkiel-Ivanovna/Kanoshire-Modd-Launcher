@@ -170,9 +170,6 @@ async function getaccounts() {
   client.login({ clientId: config.discordRPC.ClientID }).catch(console.error);
 
   client.on('ready', () => {
-    console.log('[DEBUG] Presence now active!');
-    console.log('[WARN] Do not close this Console as it will terminate the rpc');
-    console.log('=================== Error Output ===================');
     client.request('SET_ACTIVITY', {
       pid: process.pid,
       activity: {

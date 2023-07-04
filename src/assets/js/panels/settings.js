@@ -194,21 +194,24 @@ class Settings {
     });
   }
 
+  // eslint-disable-next-line class-methods-use-this
   initTab() {
-    const TabBtn = document.querySelectorAll('.tab-btn');
-    const TabContent = document.querySelectorAll('.tabs-settings-content');
+    const TabBtn = Array.from(document.querySelectorAll('.tab-btn'));
+    const TabContent = Array.from(document.querySelectorAll('.tabs-settings-content'));
 
-    for (let i = 0; i < TabBtn.length; i++) {
-      TabBtn[i].addEventListener('click', () => {
-        if (TabBtn[i].classList.contains('save-tabs-btn')) return;
-        for (let j = 0; j < TabBtn.length; j++) {
-          TabContent[j].classList.remove('active-tab-content');
+    TabBtn.forEach((btn, i) => {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('save-tabs-btn')) return;
+
+        TabContent.forEach((content, j) => {
+          content.classList.remove('active-tab-content');
           TabBtn[j].classList.remove('active-tab-btn');
-        }
+        });
+
         TabContent[i].classList.add('active-tab-content');
-        TabBtn[i].classList.add('active-tab-btn');
+        btn.classList.add('active-tab-btn');
       });
-    }
+    });
 
     document.querySelector('.save-tabs-btn').addEventListener('click', () => {
       document.querySelector('.default-tab-btn').click();

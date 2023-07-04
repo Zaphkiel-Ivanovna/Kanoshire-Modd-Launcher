@@ -19,10 +19,16 @@ class Index {
         directories: { output: 'dist' },
         compression: 'maximum',
         asar: true,
-        publish: [{
-          provider: 'github',
-          releaseType: 'release',
-        }],
+        publish: [
+          {
+            provider: 'github',
+            private: true,
+            owner: 'Zaphkiel-Ivanovna',
+            repo: 'Kanoshire-Modd-Launcher',
+            token: '<your github token>',
+            releaseType: 'release',
+          },
+        ],
         win: {
           icon: './src/assets/images/icon.ico',
           target: [{
@@ -83,4 +89,5 @@ process.argv.forEach((val) => {
   } if (val.startsWith('--build')) {
     new Index().build();
   }
+  return null;
 });
