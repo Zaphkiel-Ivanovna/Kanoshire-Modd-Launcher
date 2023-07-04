@@ -34,7 +34,7 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v1
+        uses: actions/checkout@2.3.0
 
       - name: Set up Node
         uses: actions/setup-node@v3
