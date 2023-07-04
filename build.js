@@ -23,7 +23,7 @@ class Index {
           {
             provider: 'github',
             owner: 'Zaphkiel-Ivanovna',
-            repo: 'Kanoshire-Modde-Releases ',
+            repo: 'Kanoshire-Modde-Releases',
             releaseType: 'release',
           },
         ],
