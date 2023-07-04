@@ -17,12 +17,12 @@ jobs:
         id: create_release
         uses: ncipollo/release-action@v1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_TOKEN }}
           name: Release ${{ env.version }}
           tag: ${{ env.version }}
           draft: false
           prerelease: ${{ contains(env.version, 'beta') || contains(env.version, 'alpha') }}
-          repository: <username>/<other-repository>
+          repository: Zaphkiel-Ivanovna/Kanoshire-Modde-Releases
 
   build-launcher:
     needs: create-release
