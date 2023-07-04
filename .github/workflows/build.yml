@@ -19,7 +19,7 @@ jobs:
         with:
           token: ${{ secrets.RELEASE_TOKEN }}
           name: Release ${{ env.version }}
-          tag: ${{ env.version }}
+          tag_name: ${{ env.version }}
           draft: false
           prerelease: ${{ contains(env.version, 'beta') || contains(env.version, 'alpha') }}
           repository: Zaphkiel-Ivanovna/Kanoshire-Modde-Releases
