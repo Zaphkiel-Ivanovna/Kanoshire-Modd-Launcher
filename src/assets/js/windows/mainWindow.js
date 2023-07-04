@@ -1,14 +1,9 @@
-/**
- * @author Luuxis
- * @license CC-BY-NC 4.0 - https://creativecommons.org/licenses/by-nc/4.0/
- */
+const electron = require('electron');
+const path = require('path');
+const os = require('os');
+const pkg = require('../../../../package.json');
 
-"use strict";
-const electron = require("electron");
-const path = require("path");
-const os = require("os");
-const pkg = require("../../../../package.json");
-let mainWindow = undefined;
+let mainWindow;
 
 function getWindow() {
   return mainWindow;
@@ -30,28 +25,29 @@ function createWindow() {
     minHeight: 552,
     resizable: false,
     icon: `./src/assets/images/icon.${
-      os.platform() === "win32" ? "ico" : "png"
+      os.platform() === 'win32' ? 'ico' : 'png'
     }`,
-    transparent: os.platform() === "win32",
-    frame: os.platform() !== "win32",
+    transparent: os.platform() === 'win32',
+    frame: os.platform() !== 'win32',
     show: false,
     webPreferences: {
       contextIsolation: false,
       nodeIntegration: true,
     },
   });
+  mainWindow.webContents.openDevTools();
   electron.Menu.setApplicationMenu(null);
   mainWindow.setMenuBarVisibility(false);
   mainWindow.loadFile(
-    path.join(electron.app.getAppPath(), "src", "launcher.html")
+    path.join(electron.app.getAppPath(), 'src', 'launcher.html'),
   );
-  mainWindow.once("ready-to-show", () => {
+  mainWindow.once('ready-to-show', () => {
     if (mainWindow) {
       mainWindow.show();
     }
   });
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    require('electron').shell.openExternal(url);
+    electron.shell.openExternal(url);
     return { action: 'deny' };
   });
 }
