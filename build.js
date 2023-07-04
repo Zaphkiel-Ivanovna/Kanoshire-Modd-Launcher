@@ -22,10 +22,8 @@ class Index {
         publish: [
           {
             provider: 'github',
-            private: true,
             owner: 'Zaphkiel-Ivanovna',
-            repo: 'Kanoshire-Modd-Launcher',
-            token: '<your github token>',
+            repo: 'Kanoshire-Modde-Releases ',
             releaseType: 'release',
           },
         ],
