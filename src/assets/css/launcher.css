@@ -1,174 +1,245 @@
-@import "font.css";
-@import "panels/login.css";
-@import "panels/home.css";
-@import "panels/settings.css";
+@import 'font.css';
+@import 'panels/login.css';
+@import 'panels/home.css';
+@import 'panels/settings.css';
 
 * {
-    outline: none;
+  outline: none;
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    user-select: none;
-    background: linear-gradient(#00000066, #00000066), url("../images/background/background.png") black no-repeat center center scroll;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  background: linear-gradient(#00000066, #00000066),
+    url('../images/background/background.png') black no-repeat center center scroll;
 }
 
 img {
-    -webkit-user-drag: none;
-    user-select: none;
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 .dragbar {
-    position: fixed;
-    background: #141414;
-    top: 0px;
-    left: 0px;
-    width: 100vw;
-    -webkit-app-region: drag;
-    z-index: 11;
-    height: 30px;
-    color: #ffffff;
-    font: normal normal bold 15px/25px Poppins;
-    line-height: 30px;
-    padding-left: 5px;
+  position: fixed;
+  background: #141414;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  -webkit-app-region: drag;
+  z-index: 11;
+  height: 30px;
+  color: #ffffff;
+  font: normal normal bold 15px/25px Poppins;
+  line-height: 30px;
+  padding-left: 5px;
 }
 
 .frame {
-    background: transparent;
-    position: fixed;
-    display: table;
-    top: 0px;
-    right: 0px;
-    z-index: 11;
-    -webkit-app-region: no-drag;
-    display: none;
+  background: transparent;
+  position: fixed;
+  display: table;
+  top: 0px;
+  right: 0px;
+  z-index: 11;
+  -webkit-app-region: no-drag;
+  display: none;
 }
 
 .hide {
-    display: block;
+  display: block;
 }
 
 .button-frame {
-    position: relative;
-    display: table-cell;
-    width: 30px;
-    height: 30px;
-    transition: color .2s, background-color .2s;
-    color: black;
-    cursor: pointer;
+  position: relative;
+  display: table-cell;
+  width: 30px;
+  height: 30px;
+  transition: color 0.2s, background-color 0.2s;
+  color: black;
+  cursor: pointer;
 }
 
 .icon-close:hover {
-    background: #e21212;
+  background: #e21212;
 }
 
 .icon-minimize:hover,
 .icon-restore-down:hover,
 .icon-maximize:hover {
-    background-color: #0000009d;
+  background-color: #0000009d;
 }
 
 .icon-close:before,
 .icon-minimize:before,
 .icon-maximize:before,
 .icon-restore-down:before {
-    position: absolute;
-    line-height: 30px;
-    left: 8px;
-    width: 14px;
-    height: 14px;
-    font-size: 14px;
-    color: #f8f9f9;
+  position: absolute;
+  line-height: 30px;
+  left: 8px;
+  width: 14px;
+  height: 14px;
+  font-size: 14px;
+  color: #f8f9f9;
 }
 
 .preload-content {
-    position: absolute;
-    top: 55%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  display: flex;
+  height: 100%;
+  width: 100%;
+  left: 50%;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .preload-progress {
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 127px;
+  width: 80px;
 }
 
 .dot {
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    margin-left: 14px;
-    margin-top: 12px;
-    background: #ffffff;
-    border-radius: 50%;
-    transform: translateX(0);
-    animation: dot 2.8s infinite;
+  width: 16px;
+  height: 16px;
+  margin-left: 14px;
+  margin-top: 12px;
+  background: #ffffff;
+  border-radius: 50%;
+  transform: translateX(0);
+  animation: dot 2.8s infinite;
 }
 
 .dots {
-    transform: translateX(0);
-    margin-top: 12px;
-    margin-left: 31px;
-    animation: dots 2.8s infinite;
+  transform: translateX(0);
+  margin-top: 12px;
+  margin-left: 31px;
+  animation: dots 2.8s infinite;
 }
 
 .dots span {
-    display: block;
-    float: left;
-    width: 16px;
-    height: 16px;
-    margin-left: 16px;
-    background: #ffffff;
-    border-radius: 50%;
+  display: block;
+  float: left;
+  width: 16px;
+  height: 16px;
+  margin-left: 16px;
+  background: #ffffff;
+  border-radius: 50%;
 }
 
 @keyframes dot {
-    50% {
-        transform: translateX(96px);
-    }
+  50% {
+    transform: translateX(96px);
+  }
 }
 
 @keyframes dots {
-    50% {
-        transform: translateX(-31px);
-    }
+  50% {
+    transform: translateX(-31px);
+  }
 }
 
 .preload-title {
-    font: normal normal bold 30px/40px Poppins;
-    color: #E1E1E1;
-    text-align: center;
-    margin: 2em 0;
+  font: normal normal bold 30px/40px Poppins;
+  color: #e1e1e1;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.preload-errors {
+  font: normal normal bold 10px/15px Poppins;
+  color: #e1e1e1;
+}
+
+.reset-link {
+  color: #98d1ff; /* Couleur du lien */
+  cursor: pointer; /* Curseur approprié */
+}
+
+.reset-link:hover {
+  color: #2570ad; /* Couleur du lien lorsqu'il est survolé */
 }
 
 .panel {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    z-index: 0;
-    pointer-events: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .active {
-    opacity: 1;
-    z-index: 1;
-    pointer-events: all;
+  opacity: 1;
+  z-index: 1;
+  pointer-events: all;
 }
 
 .rotation {
-    animation: rotation 5s infinite linear;
+  animation: rotation 5s infinite linear;
 }
 
 @keyframes rotation {
-    from {
-        transform: rotate(0deg);
-    }
+  from {
+    transform: rotate(0deg);
+  }
 
-    to {
-        transform: rotate(359deg);
-    }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  margin-left: auto;
+  width: 80px;
+  height: 80px;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #fff;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
 }

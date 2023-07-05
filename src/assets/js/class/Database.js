@@ -2,7 +2,7 @@ function genKey(int) {
   let key = 0;
   [...int].forEach((c) => {
     key = Math.imul(key, 31) + c.charCodeAt(0);
-    key = key < 0 ? key + 0xFFFFFFFF + 1 : key; // replace bitwise operation
+    key = key < 0 ? key + 0xffffffff + 1 : key; // replace bitwise operation
   });
   return key;
 }
@@ -11,18 +11,11 @@ class Database {
   init() {
     return new Promise((resolve) => {
       const request = indexedDB.open('database', 1);
-      const objectStores = [
-        'accounts',
-        'accounts-selected',
-        'java-path',
-        'java-args',
-        'launcher',
-        'profile',
-        'ram',
-      ];
+      const objectStores = ['accounts', 'accounts-selected', 'java-path', 'java-args', 'launcher', 'profile', 'ram'];
 
       request.onupgradeneeded = (event) => {
         const db = event.target.result;
+
         objectStores.forEach((os) => {
           if (!db.objectStoreNames.contains(os)) {
             db.createObjectStore(os, { keyPath: 'key' });
@@ -32,7 +25,22 @@ class Database {
 
       request.onsuccess = (event) => {
         this.db = event.target.result;
-        resolve(this);
+
+        // Vérifier si la base de données est vide
+        if (this.db.objectStoreNames.length === 0) {
+          const transaction = this.db.transaction(objectStores, 'readwrite');
+
+          objectStores.forEach((os) => {
+            transaction.objectStore(os).add({ key: genKey('exampleKey'), value: 'exampleValue' });
+          });
+
+          transaction.oncomplete = () => {
+            console.log('Objets créés dans la base de données');
+            resolve(this);
+          };
+        } else {
+          resolve(this);
+        }
       };
     });
   }

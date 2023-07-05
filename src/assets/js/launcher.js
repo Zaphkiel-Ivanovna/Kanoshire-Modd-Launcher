@@ -40,6 +40,20 @@ function initFrame() {
   document.querySelector('#close').addEventListener('click', () => {
     ipcRenderer.send('main-window-close');
   });
+
+  function resetIndexedDB() {
+    const request = indexedDB.deleteDatabase('database');
+
+    request.onerror = function (event) {
+      console.error('Erreur lors de la suppression de la base de données :', event.target.error);
+    };
+
+    console.log('Base de données supprimée avec succès');
+    window.location.reload();
+  }
+  document.querySelector('.reset-link').addEventListener('click', () => {
+    resetIndexedDB();
+  });
 }
 
 function createPanels(...panels) {

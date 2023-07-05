@@ -44,16 +44,21 @@ class Login {
     const microsoftBtn = document.querySelector('.microsoft');
     const mojangBtn = document.querySelector('.mojang');
     const cancelBtn = document.querySelector('.cancel-login');
+    const loadingDiv = document.querySelector('.connect-loading');
+
+    loadingDiv.style.display = 'none';
 
     microsoftBtn.addEventListener('click', () => {
       microsoftBtn.disabled = true;
       mojangBtn.disabled = true;
       cancelBtn.disabled = true;
+      loadingDiv.style.display = 'inline-block';
       ipcRenderer.invoke('Microsoft-window', this.config.client_id).then((accountConnect) => {
         if (!accountConnect) {
           microsoftBtn.disabled = false;
           mojangBtn.disabled = false;
           cancelBtn.disabled = false;
+          loadingDiv.style.display = 'none';
           return;
         }
 
