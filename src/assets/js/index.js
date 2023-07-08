@@ -17,6 +17,10 @@ function sleep(ms) {
   const message = document.querySelector('.message');
   const progress = document.querySelector('progress');
 
+  window.onunhandledrejection = (event) => {
+    console.log(event.reason);
+  };
+
   function setProgress(value, max) {
     progress.value = value;
     progress.max = max;

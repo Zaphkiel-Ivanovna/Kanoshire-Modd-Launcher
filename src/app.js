@@ -28,7 +28,7 @@ if (!gotTheLock) {
 }
 
 ipcMain.on('update-window-close', () => UpdateWindow.destroyWindow());
-ipcMain.on('update-window-dev-tools', () => UpdateWindow.getWindow().webContents.openDevTools({ mode: 'detach' }));
+ipcMain.on('update-window-dev-tools', () => (dev ? UpdateWindow.getWindow().webContents.openDevTools({ mode: 'detach' }) : null));
 ipcMain.on('main-window-open', () => MainWindow.createWindow());
 ipcMain.on('main-window-dev-tools', () => MainWindow.getWindow().webContents.openDevTools({ mode: 'detach' }));
 ipcMain.on('main-window-close', () => MainWindow.destroyWindow());

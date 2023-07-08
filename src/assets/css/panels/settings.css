@@ -116,18 +116,16 @@
 }
 
 .accounts {
-    display: contents;
+    display: flex;
     justify-content: center;
 }
 
 .account {
-    display: inline-block;
-    background: #8f0d0d;
-    box-shadow: 0 0 5px #630a0a;
-    border: 4px solid #8f0d0d;
+    background: rgba(0, 0, 0, 0.5); /* Couleur de fond transparente */
+    backdrop-filter: blur(10px);
     font: normal normal bold 30px/40px Poppins;
-    width: 500px;
-    height: 100px;
+    width: 250px;
+    height: 400px;
     margin: 1% 2%;
     border-radius: 20px;
     text-align: start;
@@ -136,37 +134,38 @@
 
 .account:hover {
     background: #630a0a;
-    box-shadow: 0 0 5px #630a0a;
     border: 4px solid #630a0a;
 }
 
 .account-image {
-    position: absolute;
-    border-radius: 31px;
-    height: 70px;
+    position: relative;
+    height: 70%;
     margin: 15px 20px;
     pointer-events: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto
 }
 
 .account-name {
-    margin: 0 100px;
     margin-top: 15px;
     font: normal normal bold 24px/35px Poppins;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    max-width: 29ch;
+    max-width: 250px;
     pointer-events: none;
+    text-align: center;
 }
 
 .account-uuid {
-    margin: 0 100px;
-    font: normal normal normal 18px/27px Poppins;
+    font: normal normal normal 14px/24px Poppins;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    max-width: 29ch;
+    max-width: 220px;
     pointer-events: none;
+    text-align: center;
 }
 
 .account-delete {

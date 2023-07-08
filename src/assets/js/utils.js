@@ -27,7 +27,7 @@ function addAccount(data) {
   div.classList.add('account');
   div.id = data.uuid;
   div.innerHTML = `
-        <img class="account-image" src="https://minotar.net/helm/${data.name}/100">
+        <img class="account-image" src="https://minotar.net/armor/body/${data.name}/100.png">
         <div class="account-name">${data.name}</div>
         <div class="account-uuid">${data.uuid}</div>
         <div class="account-delete"><div class="icon-account-delete icon-account-delete-btn"></div></div>

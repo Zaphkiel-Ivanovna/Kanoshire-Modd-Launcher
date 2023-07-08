@@ -35,7 +35,6 @@ function createWindow() {
       nodeIntegration: true,
     },
   });
-  mainWindow.webContents.openDevTools();
   electron.Menu.setApplicationMenu(null);
   mainWindow.setMenuBarVisibility(false);
   mainWindow.loadFile(

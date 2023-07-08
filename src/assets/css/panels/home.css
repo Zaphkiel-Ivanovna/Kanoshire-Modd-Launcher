@@ -260,7 +260,8 @@
   margin-right: 30px;
   min-width: 350px;
   height: 80px;
-  background-color: #00000080;
+  background: rgba(0, 0, 0, 0.5); /* Couleur de fond transparente */
+  backdrop-filter: blur(10px);
   border-radius: 10px;
   transition: opacity 1s;
 }
